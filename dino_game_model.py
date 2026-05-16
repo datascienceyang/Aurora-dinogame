@@ -44,9 +44,9 @@ class DinoGame:
     _WIN_HEIGHT = 201
     _MIN_SPAWN_INTERVAL = 600  # Minimum interval in milliseconds
     _MAX_SPAWN_INTERVAL = 1800  # Maximum interval in milliseconds
-    _speed = 4
-    _ACCELERATION = 0.001
-    _MAX_SPEED = 13
+    _speed = 2
+    _ACCELERATION = 0.0005
+    _MAX_SPEED = 6.5
     _score = -200
     _restart_button = pygame.Rect(
         _WIN_WIDTH // 2 - 36, _WIN_HEIGHT // 2 - 32, 72, 64
@@ -133,9 +133,11 @@ class DinoGame:
         """
         self._game_over = False
         self._score = -30
-        self._speed = 6
+        self._speed = 2
         self._pterodactyls.empty()
         self._cacti.empty()
+        # Clear any accumulated spawn events to prevent burst spawning
+        pygame.event.get(pygame.USEREVENT + 1)
         self.update()
 
     def quit(self):
@@ -145,6 +147,8 @@ class DinoGame:
     def start_game(self):
         """Exit the instructions stage"""
         self._is_intro = False
+        # Clear accumulated spawn events from intro screen
+        pygame.event.get(pygame.USEREVENT + 1)
 
     def duck(self):
         """

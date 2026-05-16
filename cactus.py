@@ -25,12 +25,11 @@ class Cactus(pygame.sprite.Sprite):
             winheight (int): The height of the game window.
         """
         super().__init__()
+        # Removed wide cacti (group=75px, 10=50px) that are impossible to jump over
         self.images = [
-            pygame.image.load("images/cactus-group.png").convert_alpha(),
             pygame.image.load("images/cactus-1.png").convert_alpha(),
             pygame.image.load("images/cactus-2.png").convert_alpha(),
             pygame.image.load("images/cactus-3.png").convert_alpha(),
-            pygame.image.load("images/cactus-10.png").convert_alpha(),
             pygame.image.load("images/cactus-11.png").convert_alpha(),
             pygame.image.load("images/cactus-6.png").convert_alpha(),
             pygame.image.load("images/cactus-7.png").convert_alpha(),
@@ -62,4 +61,6 @@ class Cactus(pygame.sprite.Sprite):
 
     def draw(self):
         """Draw the cactus on the surface."""
-        self._surface.blit(self.image_choice, self.rect)
+        tinted = self.image_choice.copy()
+        tinted.fill((255, 107, 107), special_flags=pygame.BLEND_MULT)
+        self._surface.blit(tinted, self.rect)

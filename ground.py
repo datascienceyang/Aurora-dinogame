@@ -51,8 +51,13 @@ class Ground(pygame.sprite.Sprite):
 
     def draw_ground(self):
         """Draw the ground on the surface."""
-        self._surface.blit(self.image, (self.x_1, self.rect.y))
-        self._surface.blit(self.image, (self.x_2, self.rect.y))
+        # Apply blue tint to ground
+        tinted1 = self.image.copy()
+        tinted1.fill((30, 58, 95), special_flags=pygame.BLEND_MULT)
+        tinted2 = self.image.copy()
+        tinted2.fill((30, 58, 95), special_flags=pygame.BLEND_MULT)
+        self._surface.blit(tinted1, (self.x_1, self.rect.y))
+        self._surface.blit(tinted2, (self.x_2, self.rect.y))
 
     def get_rect(self):
         """Return the rectangular area occupied by the ground."""

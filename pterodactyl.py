@@ -60,5 +60,7 @@ class Pterodactyl(pygame.sprite.Sprite):
         else:
             self.animation_frame += 0.05
         self.image = self.images[math.floor(self.animation_frame)]
-        self._surface.blit(self.image, self.rect)
+        tinted = self.image.copy()
+        tinted.fill((78, 205, 196), special_flags=pygame.BLEND_MULT)
+        self._surface.blit(tinted, self.rect)
         self.mask = pygame.mask.from_surface(self.image)

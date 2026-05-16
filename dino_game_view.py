@@ -36,22 +36,16 @@ class DinoGameView:
         Draw the intro screen/instructions
         """
         font = pygame.font.Font(self._FONT_PATH, 10)
-        self._game.window.fill((255, 255, 255))
+        self._game.window.fill((240, 248, 255))
         self._game.ground.draw_ground()
         text = [
-            "Welcome to the Chrome Dino Game… with a twist! To jump and duck, ",
-            "you need to physically move. Stand ~10 feet away from your camera",
-            "with it positioned at a 90 degree angle with the table. ",
-            (
-                "There will be a 10 sec calibration period"
-                "before obstacles start appearing."
-            ),
-            "Space and down arrow can also be used.",
-            "Press space to begin calibration.",
+            "EOG Blink Dino Game",
+            "Control by BLINKING your eyes!",
+            "Press SPACE to jump / start.",
         ]
         spacing = 0.1
         for index, line in enumerate(text):  # draw text on new lines
-            word_surface = font.render(line, 0, (83, 83, 83))
+            word_surface = font.render(line, 0, (0, 0, 128))
             word_rect = word_surface.get_rect(
                 midtop=(
                     self._game.win_width / 2,
@@ -70,7 +64,7 @@ class DinoGameView:
         Draw the view based on current changes in the model.
         """
         # draw background and player
-        self._game.window.fill((255, 255, 255))
+        self._game.window.fill((240, 248, 255))
         self._game.ground.draw_ground()
         self._game.player.draw_player(self._game.ground)
         # draw obstacles one by one
@@ -81,7 +75,7 @@ class DinoGameView:
         # the score starts negative for calibration, only draw after calibration
         if self._game.score >= 0:
             score_text = self._FONT.render(  # score ticker
-                f"{math.floor(self._game.score):05d}", True, (83, 83, 83)
+                f"{math.floor(self._game.score):05d}", True, (0, 0, 128)
             )
             score_rect = score_text.get_rect(
                 topright=(self._game.win_width - 10, 10)
@@ -89,7 +83,7 @@ class DinoGameView:
             self._game.window.blit(score_text, score_rect)
         else:  # calibration loading text
             calibration_text = self._FONT.render(
-                "Calibrating...", True, (83, 83, 83)
+                "Calibrating...", True, (0, 0, 128)
             )
             calibration_rect = calibration_text.get_rect(
                 midtop=(self._game.win_width / 2, self._game.win_height / 2)
@@ -112,7 +106,7 @@ class DinoGameView:
         self._game.window.blit(game_over_text, game_over_rect)
         # Draw restart button
         pygame.draw.rect(
-            self._game.window, (0, 0, 255), self._game.restart_button
+            self._game.window, (30, 58, 95), self._game.restart_button
         )
         restart_text = pygame.image.load(
             "images/restart-button.jpg"
@@ -124,7 +118,7 @@ class DinoGameView:
         # draw instruction text
         instruction_text = "Click the button or jump to restart!"
         instruction_surface = self._FONT.render(
-            instruction_text, 0, (83, 83, 83)
+            instruction_text, 0, (0, 0, 128)
         )
         instruction_rect = instruction_surface.get_rect(
             midtop=(

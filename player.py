@@ -27,11 +27,12 @@ class Player(
         """
         super().__init__()
         self._image = [
-            pygame.image.load("images/dino-run-1.png").convert_alpha(),
-            pygame.image.load("images/dino-run-2.png").convert_alpha(),
-            pygame.image.load("images/dino-run-3.png").convert_alpha(),
+            pygame.image.load("images/mascot-run-1.png").convert_alpha(),
+            pygame.image.load("images/mascot-run-2.png").convert_alpha(),
+            pygame.image.load("images/mascot-run-3.png").convert_alpha(),
         ]
         self.rect = self._image[0].get_rect()
+        self.rect.x = 100  # 向右挪100像素
         self.speed = [0, 1]
         self._surface = surface
         self._win_height = win_height
@@ -40,10 +41,6 @@ class Player(
         self.mask = 0
 
         self.is_ducking = False
-        self._ducking_images = [
-            pygame.image.load("images/dino-duck-1.png").convert_alpha(),
-            pygame.image.load("images/dino-duck-2.png").convert_alpha(),
-        ]
 
     def draw_player(self, ground):
         """Draw the player on the surface.
@@ -52,36 +49,21 @@ class Player(
             ground (Ground): The ground object used to determine the player's
             position.
         """
-        if self.is_ducking:
-            if self._animation_frame > len(self._ducking_images) - 0.2:
-                self._animation_frame = 0
-            else:
-                self._animation_frame += 0.2
-            self._surface.blit(
-                self._ducking_images[math.floor(self._animation_frame)],
-                self.rect,
-            )
-            self.mask = pygame.mask.from_surface(
-                self._ducking_images[math.floor(self._animation_frame)]
-            )
+        if False:  # ducking removed
+            pass
         else:
             if self._animation_frame > len(self._image) - 0.2:
                 self._animation_frame = 0
             else:
                 self._animation_frame += 0.2
-            if (
+            idx = 0 if (
                 self.rect.bottom
                 < ground.get_rect().top + ground.get_rect().height / 2
-            ):
-                self._surface.blit(self._image[0], self.rect)
-                self.mask = pygame.mask.from_surface(self._image[0])
-            else:
-                self._surface.blit(
-                    self._image[math.floor(self._animation_frame)], self.rect
-                )
-                self.mask = pygame.mask.from_surface(
-                    self._image[math.floor(self._animation_frame)]
-                )
+            ) else math.floor(self._animation_frame)
+            tinted = self._image[idx].copy()
+            tinted.fill((30, 144, 255), special_flags=pygame.BLEND_MULT)  # 科技蓝
+            self._surface.blit(tinted, self.rect)
+            self.mask = pygame.mask.from_surface(self._image[idx])
 
     def update(self, ground):
         """Update the player's position and animation frame.
@@ -91,20 +73,14 @@ class Player(
             position.
         """
         self.rect = self.rect.move(self.speed)
-        if (
-            self.rect.bottom
-            > ground.get_rect().top + ground.get_rect().height / 2
-        ):
+        ground_target = ground.get_rect().top + ground.get_rect().height / 2 - 7  # 抬高7像素
+        if self.rect.bottom > ground_target:
             self.speed[1] -= self.speed[1]
+            self.rect.bottom = int(ground_target)
         else:
-            self.speed[1] += 0.5
+            self.speed[1] += 0.3
 
-        if self.is_ducking:
-            self.rect = self._ducking_images[0].get_rect(
-                bottomleft=self.rect.bottomleft
-            )
-        else:
-            self.rect = self._image[0].get_rect(bottomleft=self.rect.bottomleft)
+        self.rect = self._image[0].get_rect(bottomleft=(100, self.rect.bottom))
 
     def jump(self, ground):
         """Make the player character jump.
@@ -114,7 +90,7 @@ class Player(
             can jump.
         """
         if self.rect.bottom >= ground.get_rect().top:
-            self.speed[1] -= 8
+            self.speed[1] -= 11
 
     def duck(self):
         """Make the player character duck."""
