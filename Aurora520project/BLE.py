@@ -25,7 +25,7 @@ async def connect_ble(handler):
             msg = data.decode().strip()
             handler(msg)  # 把消息传给主文件
         
-        await client.start_notify(CHAR_UUID, callback)
+        await client.start_notify(CHARACTERISTIC_UUID_TX, callback)
         while True: await asyncio.sleep(1)
 # 启动函数
 def start(handler):
